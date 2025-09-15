@@ -1,0 +1,94 @@
+.jelly-header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 999;
+    padding: 1rem 2rem;
+    backdrop-filter: blur(16px) saturate(180%);
+    background: rgba(10, 10, 25, 0.6); /* translucent jelly */
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    transition: transform 0.35s ease, box-shadow 0.3s ease;
+  }
+  
+  .jelly-header:hover {
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  }
+  
+  .header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .brand-logo {
+    height: 50px;
+    cursor: pointer;
+    filter: drop-shadow(0 0 6px #ff5f8c);
+    transition: transform 0.3s ease;
+  }
+  
+  .brand-logo:hover {
+    transform: scale(1.05) rotate(-2deg);
+  }
+  
+  .site-nav {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .nav-link {
+    cursor: pointer;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: relative;
+    transition: 0.3s ease;
+  }
+  
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background: #ff5f8c;
+    transition: width 0.3s ease;
+  }
+  
+  .nav-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Hamburger menu for mobile */
+  .hamburger {
+    display: none; /* media query needed for mobile */
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .hamburger span {
+    height: 2px;
+    background: #fff;
+    border-radius: 1px;
+    display: block;
+  }
+  
+  /* Jelly hover animation */
+  .jelly-header {
+    animation: jelly-slide 1.2s ease forwards;
+  }
+  
+  @keyframes jelly-slide {
+    0% { transform: translateY(-30px) scaleY(0.8); }
+    50% { transform: translateY(10px) scaleY(1.05); }
+    100% { transform: translateY(0) scaleY(1); }
+  }
+  
