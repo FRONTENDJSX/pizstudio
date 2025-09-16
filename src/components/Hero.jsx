@@ -4,6 +4,7 @@ import "./Hero.css";
 export default function Hero() {
   const canvasRef = useRef(null);
 
+  // Particle canvas effect
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -29,7 +30,7 @@ export default function Hero() {
           y: Math.random() * window.innerHeight,
           r: Math.random() * 2.4 + 0.6,
           vx: (Math.random() - 0.5) * 0.6,
-          vy: (Math.random() - 0.5) * 0.6
+          vy: (Math.random() - 0.5) * 0.6,
         });
       }
     }
@@ -87,7 +88,13 @@ export default function Hero() {
         g.addColorStop(1, "rgba(255,95,140,0.02)");
         ctx.fillStyle = g;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * (1 + Math.sin(Date.now() / 400 + p.r) * 0.12), 0, Math.PI * 2);
+        ctx.arc(
+          p.x,
+          p.y,
+          p.r * (1 + Math.sin(Date.now() / 400 + p.r) * 0.12),
+          0,
+          Math.PI * 2
+        );
         ctx.fill();
       }
 
@@ -121,30 +128,35 @@ export default function Hero() {
     };
   }, []);
 
-  // Smooth scroll + reveal immediately
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.classList.add("active"); // reveal immediately
-    window.scrollTo({ top: el.offsetTop, behavior: "smooth" });
-  };
+  // Automatic reveal on scroll
+  useEffect(() => {
+    const sections = document.querySelectorAll("section[data-scroll-section]");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+          }
+        });
+      },
+      { threshold: 0.25 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section id="hero" className="hero" data-scroll-section>
       <canvas ref={canvasRef} className="hero-canvas" />
       <div className="hero-inner container">
-        <h1 className="hero-title">Crafting <span className="accent">Bold</span> Experiences</h1>
+        <h1 className="hero-title">
+          Crafting <span className="accent">Bold</span> Experiences
+        </h1>
         <p className="hero-sub">
-          Piz Studio — Cinematic video, sharp editing, and AI-powered websites. Our entire site is built with AI.
+          Piz Studio — Cinematic video, sharp editing, and AI-powered websites.
+          Our entire site is built with AI.
         </p>
-        <div className="hero-cta">
-          <button className="btn" onClick={() => scrollToSection("portfolio")}>
-            See Our Work
-          </button>
-          <button className="btn ghost" onClick={() => scrollToSection("contact")}>
-            Contact
-          </button>
-        </div>
       </div>
     </section>
   );
