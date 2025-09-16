@@ -8,8 +8,7 @@ export default function About() {
           <div className="text">
             <h2>About Piz Studio</h2>
             <p>
-              Piz Studio is a one-person creative studio delivering cinematic video, sharp editing,
-              and advanced visual effects. Projects are handled end-to-end with a modern, polished approach.
+              Piz Studio is a one-person creative studio combining cinematic video, precision editing, and AI-driven website design. This entire site is built with AI, reflecting our future-forward approach.
             </p>
             <p className="muted">Fast, focused, and built for impact.</p>
           </div>

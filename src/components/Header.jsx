@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Header.css";
 import Logo from "./logo.png";
 
-export default function Header() {
+export default function Header({ scrollInstance }) {
   const [open, setOpen] = useState(false);
   const headerRef = useRef(null);
 
-  // Hide/show on scroll
+  // Hide/show header on scroll
   useEffect(() => {
     const header = headerRef.current;
-    let lastScroll = window.scrollY;
+    let lastScroll = 0;
     const handleScroll = () => {
       const currentScroll = window.scrollY;
       header.style.transform =
@@ -20,19 +20,25 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Smooth scroll with fade-in
+  // Smooth scroll to section via Locomotive Scroll
   const scrollToSection = (id) => {
-    const el = document.getElementById(id);
+    if (!scrollInstance) return;
+    const el = document.querySelector(`#${id}`);
     if (!el) return;
     const headerHeight = headerRef.current.offsetHeight || 0;
-    window.scrollTo({ top: el.offsetTop - headerHeight, behavior: "smooth" });
-    el.classList.add("active");
+
+    scrollInstance.scrollTo(el, {
+      offset: -headerHeight,
+      duration: 1000,
+      easing: [0.25, 0.0, 0.35, 1.0]
+    });
+
     setOpen(false);
   };
 
-  // Fade-in for reveal sections
+  // Fade-in sections on scroll
   useEffect(() => {
-    const revealElements = document.querySelectorAll(".reveal");
+    const revealElements = document.querySelectorAll("[data-scroll-section]");
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -66,17 +72,21 @@ export default function Header() {
 
         {/* Navigation */}
         <nav className={`site-nav ${open ? "open" : ""}`}>
-          {["home", "about", "services", "portfolio", "contact"].map(
-            (section) => (
-              <div
-                key={section}
-                className="nav-link"
-                onClick={() => scrollToSection(section)}
-              >
-                {section.charAt(0).toUpperCase() + section.slice(1)}
-              </div>
-            )
-          )}
+          {[
+            { id: "hero", label: "Home" },
+            { id: "about", label: "About" },
+            { id: "services", label: "Services" },
+            { id: "approach", label: "Our Approach" },
+            { id: "contact", label: "Contact" }
+          ].map((section) => (
+            <div
+              key={section.id}
+              className="nav-link"
+              onClick={() => scrollToSection(section.id)}
+            >
+              {section.label}
+            </div>
+          ))}
         </nav>
       </div>
     </header>

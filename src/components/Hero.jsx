@@ -135,7 +135,7 @@ export default function Hero() {
       <div className="hero-inner container">
         <h1 className="hero-title">Crafting <span className="accent">Bold</span> Experiences</h1>
         <p className="hero-sub">
-          Creative studio blending cinematic video, editing, and modern visual effects.
+          Piz Studio — Cinematic video, sharp editing, and AI-powered websites. Our entire site is built with AI.
         </p>
         <div className="hero-cta">
           <button className="btn" onClick={() => scrollToSection("portfolio")}>

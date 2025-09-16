@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import LocomotiveScroll from "locomotive-scroll";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -16,6 +16,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
   const locoRef = useRef(null);
+  const [locoInstance, setLocoInstance] = useState(null);
 
   useEffect(() => {
     const scrollEl = document.querySelector("[data-scroll-container]");
@@ -29,8 +30,8 @@ export default function App() {
       tablet: { smooth: true }
     });
     locoRef.current = loco;
+    setLocoInstance(loco);
 
-    // tell ScrollTrigger to use these proxy methods for the ".scroll-container" element:
     ScrollTrigger.scrollerProxy(scrollEl, {
       scrollTop(value) {
         return arguments.length ? loco.scrollTo(value, 0, 0) : loco.scroll.instance.scroll.y;
@@ -38,18 +39,14 @@ export default function App() {
       getBoundingClientRect() {
         return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
       },
-      // Locomotive handles things with transform, so pinType should be fixed on mobile
       pinType: scrollEl.style.transform ? "transform" : "fixed"
     });
 
-    // update ScrollTrigger on loco scroll
     loco.on("scroll", ScrollTrigger.update);
 
-    // refresh ScrollTrigger + update loco on window update
     ScrollTrigger.addEventListener("refresh", () => loco.update());
     ScrollTrigger.refresh();
 
-    // cleanup
     return () => {
       ScrollTrigger.removeEventListener("refresh", () => loco.update());
       loco.destroy();
@@ -59,7 +56,8 @@ export default function App() {
 
   return (
     <div data-scroll-container>
-      <Header />
+      {/* Pass the Locomotive Scroll instance to Header */}
+      <Header scrollInstance={locoInstance} />
       <main>
         <Hero />
         <About />
